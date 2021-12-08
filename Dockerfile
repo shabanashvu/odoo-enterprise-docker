@@ -1,4 +1,4 @@
-FROM debian:buster-slim
+FROM debian:bullseye-slim
 MAINTAINER Odoo S.A. <info@odoo.com>
 
 SHELL ["/bin/bash", "-xo", "pipefail", "-c"]
@@ -37,7 +37,7 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/* wkhtmltox.deb
 
 # install latest postgresql-client
-RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main' > /etc/apt/sources.list.d/pgdg.list \
+RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg main' > /etc/apt/sources.list.d/pgdg.list \
     && GNUPGHOME="$(mktemp -d)" \
     && export GNUPGHOME \
     && repokey='B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8' \
@@ -54,14 +54,14 @@ RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main' > /etc/
 RUN npm install -g rtlcss
 
 # Install Odoo
-ENV ODOO_VERSION 14.0
+ENV ODOO_VERSION 15.0
 ARG ODOO_RELEASE=20211201
-ARG ODOO_SHA=a53946fb08628ad74c9cd2551b79dc8b9bcc9d5d
-RUN curl -o odoo_14.0.latest_all.deb -sSL http://172.104.183.68/odoo/odoo_14.0.latest_all.deb \
-    && echo "${ODOO_SHA} odoo_14.0.latest_all.deb" | sha1sum -c - \
+ARG ODOO_SHA=33a7ab7c639ee40a082c9bd7c73025c5677056be
+RUN curl -o odoo_15.0.latest_all.deb -sSL http://172.104.183.68/odoo/odoo_15.0.latest_all.deb \
+    && echo "${ODOO_SHA} odoo_15.0.latest_all.deb" | sha1sum -c - \
     && apt-get update \
-    && apt-get -y install --no-install-recommends ./odoo_14.0.latest_all.deb \
-    && rm -rf /var/lib/apt/lists/* odoo_14.0.latest_all.deb
+    && apt-get -y install --no-install-recommends ./odoo_15.0.latest_all.deb \
+    && rm -rf /var/lib/apt/lists/* odoo_15.0.latest_all.deb
 
 # Copy entrypoint script and Odoo configuration file
 COPY ./entrypoint.sh /
